@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Practice Results</title>
+    {% load staticfiles %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}"/>
+   <link rel="stylesheet" href="{% static "font-awesome/css/font-awesome.min.css" %}" />
+   <link rel="stylesheet" href="{% static "css/animate.css" %}"/>
+    <link rel="stylesheet" href="{% static "css/style.css" %}" />
+<style>
+body{
+//background: url("{% static "images/button.jpg" %}");
+background-size: cover;
+overflow-x:visible;
+ font-family:Droid Serif;
+}
+</style>
+</head>
+
+<body style="color:black">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#"><i style="font-family:Josefin Slab; color:#FFFFFF;">Wordify</i></a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="{%static "/words/" %}" style="color:#FFFFFF;"><b>Home</b></a></li>
+             
+              
+              
+            </ul>
+            <ul class="nav navbar-nav navbar-right" style="padding-right:10px;">
+              <!--<li class="active"><a href="./">Default <span class="sr-only">(current)</span></a></li>-->
+             
+                        <li><a href="{% url 'logout' %}"style="color:#FFFFFF;">Log out</a></li>      
+                       
+                      
+                          </ul> 
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
+      
+      <center><h2 style="color:black;">RESULT</h2></center>
+      <hr style="color:blue; width:90%; height:4px;">
+      <div class="row">
+    <center><div id="placeholder" style="width:500px;height:300px"></div></center></div>
+    <p id = 'msg'></p>
+   <!-- <div class="footer" style="margin-top:10%;">
+<br/>
+<div class="row">
+<div class="col-md-3 col-xs-12 col-md-offset-1">
+<br/>
+<ul class="list-unstyled">
+<li>Home</li>
+<li>Sessions</li>
+<li>Practice</li>
+<li>Compete</li>
+</ul>
+</div>
+<div class="col-md-7 col-xs-12">
+<h3 class="hf">WORDIFY</h3>
+<p>Wordify teaches you to remember difficult words in english. It also gives meanings for those words. You can create a group or join group and participate in competition.</p>
+
+</div>-->
+
+<br></br><br></br>
+ <nav class="footer" id="footer">
+<div class="container-fluid">
+<div class="col-md-4">
+<p>Wordify teaches you to remember difficult words in english. It also gives meanings for those words. You can create a group or join group and participate in competition.</p>
+ </div> 
+<div class="col-md-4">
+ <p><i class="fa fa-copyright"></i>All Rights Reserved 2015</p>
+</div>    
+<div class="col-md-4">
+
+  <ul class="nav navbar-nav">
+    <li><a>Follow Us:</a></li>
+          <li><a href="http://www.twitter.com"><i class="fa fa-twitter-square fa-lg"></i></a></li>
+          <li><a href="http://www.facebook.com"><i class="fa fa-facebook-square fa-lg"></i></a></li>
+        <li><a href="http://www.plus.google.com"><i class=" fa fa-google-plus-square fa-lg"></i></a></li>
+  </ul>
+
+</div>
+</div>
+</nav>
+    <script language="javascript" type="text/javascript" src="../../static/js/jquery-2.1.4.js"></script>
+    <script language="javascript" type="text/javascript" src="../../static/js/jquery.flot.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var jsondata = {{jsondata|safe}};
+            // {"data": [["awkward", "awkward_mmr", 0], ["apartment", "apartment", 1], ["aftermath", "aftermath_mmr", 0]]};
+            console.log("loggin jsondata:");
+            console.log(jsondata);
+
+            var length = jsondata['data'].length;
+            var ticks_x = [];
+            $(jsondata['data']).each(function(index){
+                ticks_x.push([(index+1), $(this)[0]]);
+            });
+            console.log(ticks_x);
+            var ticks_y = [
+            [0,""],
+            [-1,'WRONG'],
+            [1,'RIGHT']
+            ];
+            var zol = [-1, 1]
+            var datapts = []
+            for (var i = 0; i<length; i++){
+                datapts.push([(i+1), zol[jsondata['data'][i][2]]])
+            }
+            console.log(datapts)
+
+            var d1 = {
+                data: datapts,
+            }
+
+            var options = {
+                xaxis:{ticks:ticks_x}, 
+                max:5,
+                yaxis:{ticks:ticks_y},
+                grid:{hoverable:true, clickable:true},
+                bars:{show:true, align:"center", barWidth : 1},
+
+            };
+            $.plot($('#placeholder'), [d1], options);
+
+            $("<div id='tooltip'></div>").css({
+                position: "absolute",
+                display: "none",
+                border: "1px solid #fdd",
+                padding: "2px",
+                "background-color": "#fee",
+                opacity: 0.80
+            }).appendTo("body");
+            $("#placeholder").bind("plothover", function (event, pos, item) {
+
+                    /*
+                    if ($("#enablePosition:checked").length > 0) {
+                        var str = "(" + pos.x.toFixed(2) + ", " + pos.y.toFixed(2) + ")";
+                        $("#hoverdata").text(str);
+                    }
+                    */
+
+                    if (item) {
+                        var x = item.datapoint[0].toFixed(2);
+                        //y = item.datapoint[1].toFixed(2);
+
+                        $("#tooltip").html("Your answer: '"+jsondata['data'][x-1][1]+"'")
+                        .css({top: item.pageY+5, left: item.pageX+5})
+                        .fadeIn(200);
+                    } else {
+                        $("#tooltip").hide();
+                    }
+                });
+
+            $("#placeholder").bind("plotclick", function(event, pos, item){
+                console.log("event:");
+                console.log(event);
+                console.log(pos);
+                console.log(item);
+                if(item){
+                    var x = item.datapoint[0];
+                    $('#msg').html('<br/><center>You clicked on Q.No.: '+(x)+',   Correct Answer : '+jsondata['data'][x-1][0]+
+                        ',   your Answer : '+jsondata['data'][x-1][1]+'</center>')
+                }
+            });
+        });
+</script>
+</body>
+
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+<script type = 'text/javascript'></script>
+
+</html>
