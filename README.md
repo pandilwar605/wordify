@@ -16,7 +16,7 @@ su pw is in comment
    the above lines at the end. (make sure which virtualenvwrapper.sh command returns something)
 4. if 2. fires successfully then type pip freeze, it should show wheel only
 5. if it shows more than that, comment out the PYTHONPATH variable in the .bashrc file
-6. so now virtualenv is setup, clone this repository: git clone https://github.com/murtraja/wordify
+6. so now virtualenv is setup, clone this repository: git clone https://github.com/pandilwar605/Wordify
 7. now look for requirements.txt and fire pip install -r requirements.txt command to install dependencies
 8. run the python server python manage.py runserver
 9. check it on localhost:8000/words
