@@ -1,8 +1,8 @@
-# wordify
+# Wordify
 the modified project
 su pw is in comment
 
-<h1> running it </h1>
+<h1> Running it </h1>
 1. install virtualenv and virtualenvwrapper through pip install command
 2. create a virtual environment first by typing mkvirtualenv myvenv
 3. if it says command not found, update ~/.bashrc file by including 
